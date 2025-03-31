@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "tipo": "Capacete",
+    "modelo": "CA-123456",
+    "dataVencimento": "2023-12-30",
+    "status": "Vencido"
+  },
+  {
+    "id": 2,
+    "tipo": "Luvas",
+    "modelo": "CA-234567",
+    "dataVencimento": "2024-06-15",
+    "status": "Ativo"
+  },
+  {
+    "id": 3,
+    "tipo": "Óculos",
+    "modelo": "CA-345678",
+    "dataVencimento": "2023-10-20",
+    "status": "Vencido"
+  },
+  {
+    "id": 4,
+    "tipo": "Protetor Auricular",
+    "modelo": "CA-456789",
+    "dataVencimento": "2024-05-12",
+    "status": "Ativo"
+  },
+  {
+    "id": 5,
+    "tipo": "Máscara",
+    "modelo": "CA-567890",
+    "dataVencimento": "2024-08-25",
+    "status": "Ativo"
+  },
+  {
+    "id": 6,
+    "tipo": "Bota",
+    "modelo": "CA-678901",
+    "dataVencimento": "2024-04-10",
+    "status": "Ativo"
+  },
+  {
+    "id": 7,
+    "tipo": "Cinto de Segurança",
+    "modelo": "CA-789012",
+    "dataVencimento": "2023-11-05",
+    "status": "Vencido"
+  },
+  {
+    "id": 8,
+    "tipo": "Protetor Facial",
+    "modelo": "CA-890123",
+    "dataVencimento": "2024-07-18",
+    "status": "Ativo"
+  },
+  {
+    "id": 9,
+    "tipo": "Capacete",
+    "modelo": "CA-901234",
+    "dataVencimento": "2024-09-30",
+    "status": "Ativo"
+  },
+  {
+    "id": 10,
+    "tipo": "Luvas",
+    "modelo": "CA-012345",
+    "dataVencimento": "2023-09-15",
+    "status": "Vencido"
+  },
+  {
+    "id": 11,
+    "tipo": "Óculos",
+    "modelo": "CA-123450",
+    "dataVencimento": "2024-10-22",
+    "status": "Ativo"
+  }
+]

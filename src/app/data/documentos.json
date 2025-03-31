@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "nome": "Manual de Procedimentos",
+    "tipo": "Manual",
+    "dataPublicacao": "2023-05-12",
+    "url": "/documentos/manual-procedimentos.pdf"
+  },
+  {
+    "id": 2,
+    "nome": "Regulamento Interno",
+    "tipo": "Regulamento",
+    "dataPublicacao": "2023-08-25",
+    "url": "/documentos/regulamento-interno.pdf"
+  },
+  {
+    "id": 3,
+    "nome": "Normas de Segurança",
+    "tipo": "Normas",
+    "dataPublicacao": "2023-10-05",
+    "url": "/documentos/normas-seguranca.pdf"
+  },
+  {
+    "id": 4,
+    "nome": "Lista de EPIs Obrigatórios",
+    "tipo": "Lista",
+    "dataPublicacao": "2024-01-15",
+    "url": "/documentos/lista-epis.pdf"
+  },
+  {
+    "id": 5,
+    "nome": "Procedimento de Emergência",
+    "tipo": "Procedimento",
+    "dataPublicacao": "2024-02-28",
+    "url": "/documentos/procedimento-emergencia.pdf"
+  }
+]

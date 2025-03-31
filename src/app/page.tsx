@@ -1,103 +1,269 @@
-import Image from "next/image";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import Card from "./components/dashboard/Card";
+import StatCard from "./components/dashboard/StatCard";
+import {
+  FaUser,
+  FaClipboardList,
+  FaHardHat,
+  FaCalendarAlt,
+  FaExclamationTriangle,
+  FaCheckCircle,
+} from "react-icons/fa";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+} from "chart.js";
+import { Pie, Bar } from "react-chartjs-2";
+
+// Importação de dados (simulando fetch de uma API)
+import funcionariosData from "./data/funcionarios.json";
+import casData from "./data/cas.json";
+import entregasData from "./data/entregas.json";
+import treinamentosData from "./data/treinamentos.json";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title
+);
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [stats, setStats] = useState({
+    funcionarios: 0,
+    entregasPendentes: 0,
+    casVencidos: 0,
+    treinamentos: 0,
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const [casVencidosData, setCasVencidosData] = useState({
+    labels: ["Vencidos", "Ativos"],
+    datasets: [
+      {
+        data: [0, 0],
+        backgroundColor: ["#c76f49", "#9ab52d"],
+      },
+    ],
+  });
+
+  const [entregasPorFuncionario, setEntregasPorFuncionario] = useState({
+    labels: [] as string[],
+    datasets: [
+      {
+        label: "Entregas por Funcionário",
+        data: [] as number[],
+        backgroundColor: "#2f47a2",
+      },
+    ],
+  });
+
+  useEffect(() => {
+    // Processar dados de estatísticas
+    const entregasPendentes = entregasData.filter(
+      (entrega) => entrega.status === "Pendente"
+    ).length;
+    const casVencidos = casData.filter((ca) => ca.status === "Vencido").length;
+
+    setStats({
+      funcionarios: funcionariosData.length,
+      entregasPendentes,
+      casVencidos,
+      treinamentos: treinamentosData.length,
+    });
+
+    // Dados para gráfico de CAs vencidos
+    setCasVencidosData({
+      labels: ["Vencidos", "Ativos"],
+      datasets: [
+        {
+          data: [casVencidos, casData.length - casVencidos],
+          backgroundColor: ["#c76f49", "#9ab52d"],
+        },
+      ],
+    });
+
+    // Dados para gráfico de entregas por funcionário
+    const entregasPorFunc: Record<number, number> = {};
+    entregasData.forEach((entrega) => {
+      if (entrega.status === "Entregue") {
+        const funcionarioId = entrega.funcionarioId;
+        entregasPorFunc[funcionarioId] =
+          (entregasPorFunc[funcionarioId] || 0) + 1;
+      }
+    });
+
+    const labels = Object.keys(entregasPorFunc).map((id) => {
+      const funcionario = funcionariosData.find((f) => f.id === parseInt(id));
+      return funcionario ? funcionario.nome : `Funcionário ${id}`;
+    });
+
+    setEntregasPorFuncionario({
+      labels,
+      datasets: [
+        {
+          label: "Entregas por Funcionário",
+          data: Object.values(entregasPorFunc),
+          backgroundColor: "#2f47a2",
+        },
+      ],
+    });
+  }, []);
+
+  // Obter lista de funcionários que estão pagando mais
+  const funcionariosPagantes = [...funcionariosData]
+    .sort((a, b) => b.valorPago - a.valorPago)
+    .slice(0, 3);
+
+  // Obter lista de entregas pendentes recentes
+  const entregasPendentes = entregasData
+    .filter((entrega) => entrega.status === "Pendente")
+    .map((entrega) => {
+      const funcionario = funcionariosData.find(
+        (f) => f.id === entrega.funcionarioId
+      );
+      const ca = casData.find((c) => c.id === entrega.caId);
+      return {
+        ...entrega,
+        funcionarioNome: funcionario ? funcionario.nome : "Desconhecido",
+        caTipo: ca ? ca.tipo : "Desconhecido",
+        caModelo: ca ? ca.modelo : "Desconhecido",
+      };
+    });
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <StatCard
+          title="Funcionários"
+          value={stats.funcionarios}
+          icon={<FaUser size={24} />}
+          color="azul"
+        />
+
+        <StatCard
+          title="Entregas Pendentes"
+          value={stats.entregasPendentes}
+          icon={<FaClipboardList size={24} />}
+          color="amarelo"
+        />
+
+        <StatCard
+          title="CAs Vencidos"
+          value={stats.casVencidos}
+          icon={<FaExclamationTriangle size={24} />}
+          color="laranja"
+        />
+
+        <StatCard
+          title="Treinamentos"
+          value={stats.treinamentos}
+          icon={<FaCalendarAlt size={24} />}
+          color="verde"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <Card title="CAs por Status">
+          <div
+            style={{
+              height: "250px",
+              display: "flex",
+              justifyContent: "center",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            <Pie
+              data={casVencidosData}
+              options={{ maintainAspectRatio: false }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+          </div>
+        </Card>
+
+        <Card title="Entregas por Funcionário">
+          <Bar
+            data={entregasPorFuncionario}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                title: {
+                  display: false,
+                },
+              },
+            }}
+            height={250}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card title="Entregas Pendentes">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Funcionário</th>
+                <th>Equipamento</th>
+                <th>Modelo</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entregasPendentes.map((entrega) => (
+                <tr key={entrega.id}>
+                  <td>{entrega.funcionarioNome}</td>
+                  <td>{entrega.caTipo}</td>
+                  <td>{entrega.caModelo}</td>
+                  <td>
+                    <span className="badge badge-warning">Pendente</span>
+                  </td>
+                </tr>
+              ))}
+              {entregasPendentes.length === 0 && (
+                <tr>
+                  <td colSpan={4} className="text-center py-4">
+                    Nenhuma entrega pendente
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </Card>
+
+        <Card title="Funcionários com Maior Pagamento">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Cargo</th>
+                <th>Setor</th>
+                <th>Valor Pago</th>
+              </tr>
+            </thead>
+            <tbody>
+              {funcionariosPagantes.map((funcionario) => (
+                <tr key={funcionario.id}>
+                  <td>{funcionario.nome}</td>
+                  <td>{funcionario.cargo}</td>
+                  <td>{funcionario.setor}</td>
+                  <td>R$ {funcionario.valorPago.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Card>
+      </div>
     </div>
   );
 }

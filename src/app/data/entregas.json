@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "funcionarioId": 1,
+    "caId": 1,
+    "dataEntrega": "2023-06-15",
+    "status": "Entregue"
+  },
+  {
+    "id": 2,
+    "funcionarioId": 2,
+    "caId": 2,
+    "dataEntrega": "2023-07-20",
+    "status": "Entregue"
+  },
+  {
+    "id": 3,
+    "funcionarioId": 1,
+    "caId": 3,
+    "dataEntrega": "2023-08-10",
+    "status": "Entregue"
+  },
+  {
+    "id": 4,
+    "funcionarioId": 3,
+    "caId": 4,
+    "dataEntrega": "2023-09-05",
+    "status": "Entregue"
+  },
+  {
+    "id": 5,
+    "funcionarioId": 1,
+    "caId": 5,
+    "dataEntrega": "2023-10-12",
+    "status": "Entregue"
+  },
+  {
+    "id": 6,
+    "funcionarioId": 2,
+    "caId": 6,
+    "dataEntrega": "2023-11-18",
+    "status": "Entregue"
+  },
+  {
+    "id": 7,
+    "funcionarioId": 3,
+    "caId": 7,
+    "dataEntrega": "2023-12-03",
+    "status": "Entregue"
+  },
+  {
+    "id": 8,
+    "funcionarioId": 4,
+    "caId": 8,
+    "dataEntrega": "2024-01-15",
+    "status": "Entregue"
+  },
+  {
+    "id": 9,
+    "funcionarioId": 3,
+    "caId": 9,
+    "dataEntrega": "2024-02-20",
+    "status": "Entregue"
+  },
+  {
+    "id": 10,
+    "funcionarioId": 5,
+    "caId": 10,
+    "dataEntrega": "2024-03-10",
+    "status": "Entregue"
+  },
+  {
+    "id": 11,
+    "funcionarioId": 5,
+    "caId": 11,
+    "dataEntrega": null,
+    "status": "Pendente"
+  },
+  {
+    "id": 12,
+    "funcionarioId": 4,
+    "caId": 2,
+    "dataEntrega": null,
+    "status": "Pendente"
+  },
+  {
+    "id": 13,
+    "funcionarioId": 1,
+    "caId": 6,
+    "dataEntrega": null,
+    "status": "Pendente"
+  }
+]
