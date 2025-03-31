@@ -40,6 +40,20 @@ body {
   left: 0;
   top: 0;
   overflow-y: auto;
+  z-index: 20;
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 250px;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    padding: 20px !important;
+    padding-top: 60px !important;
+  }
 }
 
 .sidebar-logo {
@@ -84,6 +98,7 @@ body {
 .main-content {
   margin-left: 250px;
   padding: 20px;
+  transition: margin-left 0.3s ease;
 }
 
 .dashboard-card {
@@ -133,6 +148,12 @@ body {
 .table {
   width: 100%;
   border-collapse: collapse;
+  overflow-x: auto;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .table th {
@@ -165,4 +186,49 @@ body {
 .badge-warning {
   background-color: var(--amarelo);
   color: black;
+}
+
+/* Responsividade para gráficos */
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-height: 300px;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-success {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+/* Estilo para tabelas responsivas */
+@media (max-width: 768px) {
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Adiciona suporte para o breakpoint "xs" que não existe por padrão no Tailwind */
+@media (min-width: 480px) {
+  .xs\:hidden {
+    display: none;
+  }
+
+  .xs\:inline {
+    display: inline;
+  }
+
+  .xs\:block {
+    display: block;
+  }
 }

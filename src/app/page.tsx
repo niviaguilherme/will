@@ -142,10 +142,10 @@ export default function Home() {
     });
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+    <div className="p-3 md:p-6">
+      <h1 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-4 md:mb-8">
         <StatCard
           title="Funcionários"
           value={stats.funcionarios}
@@ -175,15 +175,9 @@ export default function Home() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-8">
         <Card title="CAs por Status">
-          <div
-            style={{
-              height: "250px",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
+          <div className="chart-container flex justify-center items-center">
             <Pie
               data={casVencidosData}
               options={{ maintainAspectRatio: false }}
@@ -192,76 +186,80 @@ export default function Home() {
         </Card>
 
         <Card title="Entregas por Funcionário">
-          <Bar
-            data={entregasPorFuncionario}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                title: {
-                  display: false,
+          <div className="chart-container">
+            <Bar
+              data={entregasPorFuncionario}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  title: {
+                    display: false,
+                  },
                 },
-              },
-            }}
-            height={250}
-          />
+              }}
+            />
+          </div>
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card title="Entregas Pendentes">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Funcionário</th>
-                <th>Equipamento</th>
-                <th>Modelo</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entregasPendentes.map((entrega) => (
-                <tr key={entrega.id}>
-                  <td>{entrega.funcionarioNome}</td>
-                  <td>{entrega.caTipo}</td>
-                  <td>{entrega.caModelo}</td>
-                  <td>
-                    <span className="badge badge-warning">Pendente</span>
-                  </td>
-                </tr>
-              ))}
-              {entregasPendentes.length === 0 && (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        <Card title="Funcionários que Mais Pagaram">
+          <div className="table-responsive">
+            <table className="table w-full">
+              <thead>
                 <tr>
-                  <td colSpan={4} className="text-center py-4">
-                    Nenhuma entrega pendente
-                  </td>
+                  <th>Nome</th>
+                  <th>Cargo</th>
+                  <th>Valor Pago</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {funcionariosPagantes.map((funcionario) => (
+                  <tr key={funcionario.id}>
+                    <td>{funcionario.nome}</td>
+                    <td>{funcionario.cargo}</td>
+                    <td>R$ {funcionario.valorPago.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Card>
 
-        <Card title="Funcionários com Maior Pagamento">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Cargo</th>
-                <th>Setor</th>
-                <th>Valor Pago</th>
-              </tr>
-            </thead>
-            <tbody>
-              {funcionariosPagantes.map((funcionario) => (
-                <tr key={funcionario.id}>
-                  <td>{funcionario.nome}</td>
-                  <td>{funcionario.cargo}</td>
-                  <td>{funcionario.setor}</td>
-                  <td>R$ {funcionario.valorPago.toFixed(2)}</td>
+        <Card title="Entregas Pendentes">
+          <div className="table-responsive">
+            <table className="table w-full">
+              <thead>
+                <tr>
+                  <th>Funcionário</th>
+                  <th>Tipo</th>
+                  <th>Modelo</th>
+                  <th>Data</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {entregasPendentes.slice(0, 5).map((entrega) => (
+                  <tr key={entrega.id}>
+                    <td>{entrega.funcionarioNome}</td>
+                    <td>{entrega.caTipo}</td>
+                    <td>{entrega.caModelo}</td>
+                    <td>
+                      {entrega.dataEntrega
+                        ? new Date(entrega.dataEntrega).toLocaleDateString()
+                        : "Pendente"}
+                    </td>
+                    <td>
+                      <span className="badge badge-warning">
+                        {entrega.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Card>
       </div>
     </div>

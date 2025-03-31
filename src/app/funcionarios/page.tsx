@@ -136,28 +136,30 @@ export default function Funcionarios() {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Funcionários</h1>
+    <div className="p-3 md:p-6">
+      <div className="flex justify-between items-center mb-4 md:mb-6">
+        <h1 className="text-lg md:text-2xl font-bold">Funcionários</h1>
         <button
-          className="btn-primary flex items-center"
+          className="btn-primary flex items-center text-xs md:text-sm py-2 px-3 md:py-2 md:px-4 rounded-md"
           onClick={() => handleOpenForm()}
         >
-          <FaPlus className="mr-2" /> Novo Funcionário
+          <FaPlus className="mr-1 md:mr-2" size={12} />{" "}
+          <span className="hidden xs:inline">Novo Funcionário</span>
+          <span className="xs:hidden">Novo</span>
         </button>
       </div>
 
       {/* Lista de Funcionários */}
       <Card title="Lista de Funcionários">
-        <div className="overflow-x-auto">
-          <table className="table">
+        <div className="table-responsive">
+          <table className="table w-full">
             <thead>
               <tr>
                 <th>Nome</th>
                 <th>Cargo</th>
-                <th>Setor</th>
+                <th className="hidden md:table-cell">Setor</th>
                 <th>Status</th>
-                <th>Valor Pago</th>
+                <th className="hidden sm:table-cell">Valor Pago</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -166,7 +168,7 @@ export default function Funcionarios() {
                 <tr key={funcionario.id}>
                   <td>{funcionario.nome}</td>
                   <td>{funcionario.cargo}</td>
-                  <td>{funcionario.setor}</td>
+                  <td className="hidden md:table-cell">{funcionario.setor}</td>
                   <td>
                     <span
                       className={`badge ${
@@ -178,28 +180,30 @@ export default function Funcionarios() {
                       {funcionario.status}
                     </span>
                   </td>
-                  <td>R$ {funcionario.valorPago.toFixed(2)}</td>
-                  <td className="flex space-x-2">
+                  <td className="hidden sm:table-cell">
+                    R$ {funcionario.valorPago.toFixed(2)}
+                  </td>
+                  <td className="flex space-x-1 md:space-x-2">
                     <button
                       className="text-blue-600"
                       onClick={() => handleViewDetails(funcionario)}
                       title="Ver detalhes"
                     >
-                      <FaHardHat />
+                      <FaHardHat size={14} />
                     </button>
                     <button
                       className="text-yellow-600"
                       onClick={() => handleOpenForm(funcionario)}
                       title="Editar"
                     >
-                      <FaEdit />
+                      <FaEdit size={14} />
                     </button>
                     <button
                       className="text-red-600"
                       onClick={() => handleDelete(funcionario.id)}
                       title="Excluir"
                     >
-                      <FaTrash />
+                      <FaTrash size={14} />
                     </button>
                   </td>
                 </tr>
@@ -218,10 +222,10 @@ export default function Funcionarios() {
 
       {/* Formulário */}
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-lg w-full">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 md:p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">
+              <h2 className="text-lg md:text-xl font-bold">
                 {editingId !== null ? "Editar Funcionário" : "Novo Funcionário"}
               </h2>
               <button onClick={handleCloseForm} className="text-gray-500">
@@ -230,7 +234,7 @@ export default function Funcionarios() {
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-4">
                 <div>
                   <label className="block mb-1">Nome</label>
                   <input
